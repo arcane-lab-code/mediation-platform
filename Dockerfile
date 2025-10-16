@@ -4,7 +4,7 @@
 FROM node:18-alpine AS frontend-build
 WORKDIR /app/client
 COPY client/package*.json ./
-RUN npm ci --only=production
+RUN npm install --omit=dev
 COPY client/ ./
 ENV REACT_APP_API_URL=/api
 RUN npm run build
@@ -13,7 +13,7 @@ RUN npm run build
 FROM node:18-alpine AS backend-build
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci --only=production
+RUN npm install --omit=dev
 COPY server/ ./server/
 
 # Stage 3: Production image
