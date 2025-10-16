@@ -36,14 +36,22 @@ RUN npm install express-static
 
 # Create startup script
 RUN echo '#!/bin/sh' > /app/start.sh && \
-    echo 'echo "Waiting for database..."' >> /app/start.sh && \
-    echo 'while ! pg_isready -h $DB_HOST -p $DB_PORT -U $DB_USER > /dev/null 2>&1; do' >> /app/start.sh && \
-    echo '  sleep 1' >> /app/start.sh && \
-    echo 'done' >> /app/start.sh && \
-    echo 'echo "Database is ready!"' >> /app/start.sh && \
-    echo 'echo "Initializing database schema..."' >> /app/start.sh && \
-    echo 'PGPASSWORD=$DB_PASSWORD psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME -f /app/server/database/schema.sql || echo "Schema already exists"' >> /app/start.sh && \
-    echo 'echo "Starting server..."' >> /app/start.sh && \
+    echo 'echo "Starting Mediation Platform..."' >> /app/start.sh && \
+    echo 'if [ -n "$DB_HOST" ]; then' >> /app/start.sh && \
+    echo '  echo "Waiting for database at $DB_HOST:$DB_PORT..."' >> /app/start.sh && \
+    echo '  for i in $(seq 1 30); do' >> /app/start.sh && \
+    echo '    if pg_isready -h $DB_HOST -p $DB_PORT -U $DB_USER > /dev/null 2>&1; then' >> /app/start.sh && \
+    echo '      echo "Database is ready!"' >> /app/start.sh && \
+    echo '      echo "Initializing database schema..."' >> /app/start.sh && \
+    echo '      PGPASSWORD=$DB_PASSWORD psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME -f /app/server/database/schema.sql 2>/dev/null || echo "Schema already exists or connection failed"' >> /app/start.sh && \
+    echo '      break' >> /app/start.sh && \
+    echo '    fi' >> /app/start.sh && \
+    echo '    sleep 1' >> /app/start.sh && \
+    echo '  done' >> /app/start.sh && \
+    echo 'else' >> /app/start.sh && \
+    echo '  echo "WARNING: No database configured (DB_HOST not set)"' >> /app/start.sh && \
+    echo 'fi' >> /app/start.sh && \
+    echo 'echo "Starting server on port 5000..."' >> /app/start.sh && \
     echo 'node server/index.js' >> /app/start.sh && \
     chmod +x /app/start.sh
 
