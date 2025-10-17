@@ -44,11 +44,19 @@ const api = {
 const AuthContext = React.createContext();
 
 function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  // Mock user - bypass authentication temporarily
+  const [user, setUser] = useState({
+    id: 1,
+    email: 'demo@mediation.com',
+    first_name: 'Demo',
+    last_name: 'User',
+    role: 'client'
+  });
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    checkAuth();
+    // Skip authentication check
+    // checkAuth();
   }, []);
 
   const checkAuth = async () => {
@@ -384,7 +392,8 @@ function ProtectedRoute({ children }) {
     return <div className="loading">Loading...</div>;
   }
 
-  return user ? children : <Navigate to="/login" />;
+  // Bypass authentication - always show content
+  return children;
 }
 
 // Main App
