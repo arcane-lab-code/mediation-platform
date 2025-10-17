@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .card {
+            background: white;
+            color: #333;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .success { color: #10b981; font-weight: bold; }
+        .error { color: #ef4444; font-weight: bold; }
+        #jstest { color: #ef4444; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>🏛️ Mediation Platform - Diagnostic</h1>
+        <h2>JavaScript Test</h2>
+
+        <p id="jstest" class="error">❌ JavaScript is NOT working</p>
+
+        <script>
+            document.getElementById('jstest').innerHTML = '✅ JavaScript IS working!';
+            document.getElementById('jstest').className = 'success';
+        </script>
+
+        <hr style="margin: 20px 0;">
+
+        <h3>Static HTML Content</h3>
+        <p>This content is pure HTML and should always be visible.</p>
+
+        <h3>Browser Information</h3>
+        <p><strong>User Agent:</strong> <span id="ua">Loading...</span></p>
+        <script>
+            document.getElementById('ua').innerText = navigator.userAgent;
+        </script>
+
+        <hr style="margin: 20px 0;">
+
+        <p><a href="/" style="color: #667eea; font-weight: bold;">← Back to App</a></p>
+    </div>
+</body>
+</html>
